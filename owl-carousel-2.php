@@ -14,7 +14,6 @@ function owl_init() {
     $args = array(
         'public' => true,
         'label' => 'Owl Carousel',
-        'taxonomies' => array( 'category'),
         'menu_icon' => 'dashicons-images-alt2',
         'supports' => array(
             'title',
