@@ -14,6 +14,7 @@ function owl_init() {
     $args = array(
         'public' => true,
         'label' => 'Owl Carousel',
+        'taxonomies' => array( 'category'),
         'menu_icon' => 'dashicons-images-alt2',
         'supports' => array(
             'title',
@@ -51,9 +52,15 @@ function owl_register_styles() {
 }
 
 function owl_function($type='owl_function') {
+    $atts = shortcode_atts(
+  		array(
+        'cat' => 'default cat',
+  		), $atts, 'bartag' );
+
     $args = array(
         'post_type' => 'owl_images',
-        'posts_per_page' => 5
+        'posts_per_page' => 5,
+        'category_name'=>$atts['cat'],
     );
     $result = '<div class="slideshow">';
     $result = '<div class="owl-carousel owl-theme">';
