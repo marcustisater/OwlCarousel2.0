@@ -51,17 +51,18 @@ function owl_register_styles() {
     wp_enqueue_style('owl-theme-styles');
 }
 
-function owl_function($type='owl_function') {
+function owl_function($atts, $type='owl_function') {
     $atts = shortcode_atts(
   		array(
-        'cat' => 'default cat',
-  		), $atts, 'bartag' );
+        'category' => 'default category',
+  		), $atts, 'owl' );
 
     $args = array(
+        'category_name'=>$atts['category'],
         'post_type' => 'owl_images',
         'posts_per_page' => 5,
-        'category_name'=>$atts['cat'],
     );
+
     $result = '<div class="slideshow">';
     $result = '<div class="owl-carousel owl-theme">';
     //the loop
@@ -83,8 +84,36 @@ function owl_function($type='owl_function') {
     return $result;
 }
 
-add_shortcode('owl-shortcode', 'owl_function');
+add_shortcode('owl', 'owl_function');
 
+
+add_action( 'admin_head', 'owl_add_tinymce' );
+function owl_add_tinymce() {
+    global $typenow;
+    // Only on Post Type: post and page
+    if( ! in_array( $typenow, array( 'post', 'page' ) ) )
+        return ;
+
+    add_filter( 'mce_external_plugins', 'owl_add_tinymce_plugin' );
+    add_filter( 'mce_buttons', 'owl_add_tinymce_button' );
+}
+
+function owl_add_tinymce_plugin( $plugin_array ) {
+
+    $plugin_array['owl_test'] = plugins_url( 'assets/shortcode.js', __FILE__ );
+    var_dump( $plugin_array );
+    return $plugin_array;
+}
+
+// Add the button key for address via JS
+function owl_add_tinymce_button( $buttons ) {
+
+    array_push( $buttons, 'owl_test_button_key' );
+    var_dump( $buttons );
+    return $buttons;
+}
+
+/* Widget */
 
 function owl_widgets_init() {
     register_widget('owl_Widget');
