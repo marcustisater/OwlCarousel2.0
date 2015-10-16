@@ -27,29 +27,16 @@ function owl_init() {
 
 add_action('init', 'owl_init');
 
-add_action('wp_print_scripts', 'owl_register_scripts');
-add_action('wp_print_styles', 'owl_register_styles');
-
-function owl_register_scripts() {
-    if (!is_admin()) {
-        wp_register_script('owl_carousel-script', plugins_url('assets/owl.carousel.min.js', __FILE__));
-        wp_register_script('owl_carousel-jquery', plugins_url('assets/jquery-1.11.3.min.js', __FILE__));
-        wp_register_script('owl_carousel-plugin', plugins_url('theme.js', __FILE__));
-
-        //register
-        wp_enqueue_script('owl_carousel-jquery');
-        wp_enqueue_script('owl_carousel-script');
-        wp_enqueue_script('owl_carousel-plugin');
-    }
+function owl_scripts() {
+  wp_enqueue_style('owl-style', plugins_url('assets/owl.carousel.css', __FILE__));
+  wp_enqueue_style('owl-style-custom', plugins_url('theme.css', __FILE__));
+  wp_enqueue_script('jquery');
+  wp_enqueue_script('owl-carousel-script', plugins_url('assets/owl.carousel.min.js', __FILE__, array( 'jquery' )));
+  wp_enqueue_script('owl-carousel-script-custom', plugins_url('theme.js', __FILE__, array( 'jquery' )));
 }
 
-function owl_register_styles() {
-    wp_register_style('owl_styles', plugins_url('assets/owl.carousel.css', __FILE__));
-    wp_register_style('owl-theme-styles', plugins_url('theme.css', __FILE__));
+add_action( 'wp_enqueue_scripts', 'owl_scripts' );
 
-    wp_enqueue_style('owl_styles');
-    wp_enqueue_style('owl-theme-styles');
-}
 
 function owl_function($atts, $type='owl_function') {
     $atts = shortcode_atts(
